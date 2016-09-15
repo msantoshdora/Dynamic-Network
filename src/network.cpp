@@ -1,12 +1,14 @@
 #include"request.h"
 #include"network.h"
-
+#include<iostream>
 //Network constructor
 Network::Network(){}
 
 //Network request generator
-void Network::generateRequest(){
-
+Request Network::generateRequest(){
+	Request obj;
+	std::cout<<"Hello\n";
+	return obj;
 }
 
 //Resource allocator

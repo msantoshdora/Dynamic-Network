@@ -8,6 +8,7 @@ class Request{
 		double holding_time;
 		double bandwidth;
 	public:
+		Request();
 		Request(int src, int dest, double h_time, double bw);
 		void setRequest(int src, int dest, double h_time, double bw);
 		

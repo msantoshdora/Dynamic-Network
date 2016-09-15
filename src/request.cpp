@@ -1,5 +1,8 @@
 #include "request.h"
 
+
+//Default Constructor
+Request::Request(){}
 // Request constructor
 Request::Request(int src, int dest, double h_time, double bw){
 

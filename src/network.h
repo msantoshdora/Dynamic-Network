@@ -2,11 +2,11 @@
 #define NETWORK_H
 
 class Network{
-	private:
+	//private:
 		
 	public:
 		Network();
-		void generateRequest();
+		Request generateRequest();
 		void allocateBandwidth();
 		void beginServing();
 		void releaseResources();
