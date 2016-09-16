@@ -4,6 +4,10 @@
 #include<random>
 #include<stdlib.h>
 #include<time.h>
+#include<climits>
+
+
+#define V 6
 
 //Network constructor
 Network::Network(){}
@@ -28,7 +32,7 @@ Request Network::generateRequest(int source){
 
 //Resource allocator
 void Network::allocateBandwidth(){
-
+	
 }
 
 //Initialize the serving
@@ -36,5 +40,78 @@ void Network::beginServing(){}
 
 //Release the Resource after finishing the request
 void Network::releaseResources(){}
+
+//A utility function to find the vertex with minimum distance
+//value, from the set of vertices not yet included in shortest
+//path tree
+int Network::minDistance(int dist[], bool sptSet[]){
+    // Initialize min value
+    int min = INT_MAX, min_index;
+ 
+    for (int v = 0; v < V; v++)
+        if (sptSet[v] == false && dist[v] <= min)
+            min = dist[v], min_index = v;
+ 
+    return min_index;
+
+}
+
+// To print the shortest path from source to destination
+void Network::printPath(int parent[], int destination){
+    // Base Case : If j is source
+    if (parent[destination]==-1)
+        return;
+ 
+    printPath(parent, parent[destination]);
+ 
+    printf("%d ", destination);
+}
+
+
+//Find shortest path to allocate the resources
+void Network::findShortestPath(int graph[V][V], int source){
+
+	
+ 
+    // Initialize all distances as INFINITE and stpSet[] as false
+    for (int i = 0; i < V; i++)
+    {
+        parent[0] = -1;
+        dist[i] = INT_MAX;
+        sptSet[i] = false;
+    }
+ 
+    // Distance of source vertex from itself is always 0
+    dist[src] = 0;
+ 
+    // Find shortest path for all vertices
+    for (int count = 0; count < V-1; count++)
+    {
+        // Pick the minimum distance vertex from the set of
+        // vertices not yet processed. u is always equal to src
+        // in first iteration.
+        int u = minDistance(dist, sptSet);
+ 
+        // Mark the picked vertex as processed
+        sptSet[u] = true;
+ 
+        // Update dist value of the adjacent vertices of the
+        // picked vertex.
+        for (int v = 0; v < V; v++)
+ 
+            // Update dist[v] only if is not in sptSet, there is
+            // an edge from u to v, and total weight of path from
+            // src to v through u is smaller than current value of
+            // dist[v]
+            if (!sptSet[v] && graph[u][v] &&
+                dist[u] + graph[u][v] < dist[v])
+            {
+                parent[v]  = u;
+                dist[v] = dist[u] + graph[u][v];
+            }  
+    }
+	
+}
+
 
 
