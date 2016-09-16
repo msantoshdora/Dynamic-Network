@@ -18,9 +18,10 @@ int main(){
 	double diff = 0;
 	int req;
 	std::map<int,Request> network;
-
-	std::default_random_engine generator;
-	std::default_random_engine request_generator;
+	 std::random_device rd;
+        std::default_random_engine generator(rd());
+	//std::default_random_engine generator;
+	std::default_random_engine request_generator(rd());
 	std::poisson_distribution<int> distribution(NETWORK_MEAN);
 	std::poisson_distribution<int> no_of_request(REQUESTS);
 	
@@ -33,7 +34,7 @@ int main(){
 	for(int i = 1; i<= NETWORK_NODES; i++){
 
 	       req = no_of_request(request_generator);
-	       std::cout<<"For "<<i<<" Station: "<<req<<"\n";
+	       std::cout<<"For "<<i<<" Station, Number of Requests: "<<req<<"\n";
 	      
 	       Request r1;
 	       diff = 0;                         //Intializing to 0
