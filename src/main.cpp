@@ -11,12 +11,13 @@
 #define  NETWORK_NODES 6
 #define  REQUESTS 6
 
+
 int main(){
 	
 	clock_t begin = clock();
 	double diff = 0;
 	int req;
-	std::map<int,list<Request>> network;
+	std::map<int,Request> network;
 
 	std::default_random_engine generator;
 	std::default_random_engine request_generator;
@@ -24,7 +25,8 @@ int main(){
 	std::poisson_distribution<int> no_of_request(REQUESTS);
 	
 	std::fstream myfile;
-	
+	Network n1;
+
 	myfile.open("result.txt", std::ios::out | std::ios::trunc);
   	
 	//For first 6 seconds
@@ -32,7 +34,7 @@ int main(){
 
 	       req = no_of_request(request_generator);
 	       std::cout<<"For "<<i<<" Station: "<<req<<"\n";
-	       Network n1;
+	      
 	       Request r1;
 	       diff = 0;                         //Intializing to 0
 	       begin = clock();		        // Recording the beginning Time
@@ -57,7 +59,18 @@ int main(){
 	}
 
 	//For rest 15 seconds
-	std::cout<<"Total: "<<network.size()<<"\n";
+	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 4, 0, 0, 0, 0},
+                       {4, 0, 8, 0, 0, 0},
+                       {0, 8, 0, 7, 0, 4},
+                       {0, 0, 7, 0, 9, 14},
+                       {0, 0, 0, 9, 0, 10},
+                       {0, 0, 4, 0, 10, 0},
+                     
+                      };
+ 
+ 	//To print the shortest path   
+	n1.findShortestPath(graph,1);
+	n1.printPath(4);	
 	
 
 	myfile << diff;
