@@ -57,26 +57,26 @@ int Network::minDistance(int dist[], bool sptSet[]){
 }
 
 // To print the shortest path from source to destination
-void Network::printPath(int parent[], int destination){
+void Network::printPath(int destin){
     // Base Case : If j is source
-    if (parent[destination]==-1)
+    if (parent[destin]==-1)
         return;
  
-    printPath(parent, parent[destination]);
+    printPath( parent[destin]);
  
-    printf("%d ", destination);
+    printf("%d ", destin);
 }
 
 
 //Find shortest path to allocate the resources
-void Network::findShortestPath(int graph[V][V], int source){
+void Network::findShortestPath(int graph[V][V], int src){
 
 	
  
     // Initialize all distances as INFINITE and stpSet[] as false
     for (int i = 0; i < V; i++)
     {
-        parent[0] = -1;
+        parent[src] = -1;
         dist[i] = INT_MAX;
         sptSet[i] = false;
     }

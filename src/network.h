@@ -22,12 +22,12 @@ class Network{
 	public:
 		Network();
 		Request generateRequest(int source);
-		void findShortestPath(int graph[V][V], int destination);
+		void findShortestPath(int graph[V][V], int source);
 		void allocateBandwidth();
 		void beginServing();
 		void releaseResources();
 		int minDistance(int dist[], bool sptSet[]);
-		void printPath(int parent[], int j);
+		void printPath(int j);
 		
 };
 
