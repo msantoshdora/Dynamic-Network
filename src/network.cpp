@@ -1,13 +1,28 @@
 #include"request.h"
 #include"network.h"
 #include<iostream>
+#include<random>
+#include<stdlib.h>
+#include<time.h>
+
 //Network constructor
 Network::Network(){}
 
 //Network request generator
-Request Network::generateRequest(){
+Request Network::generateRequest(int source){
 	Request obj;
-	std::cout<<"Hello\n";
+	std::default_random_engine generator;
+	std::poisson_distribution<int> distribution(10);
+	/* initialize random seed */
+	srand(time(NULL));
+
+	src = source;
+	dest = rand() % 6 +1;
+
+	bw = distribution(generator);
+	htime = distribution(generator);
+	obj.setRequest(src,dest,bw,htime);
+	std::cout<<"Matching: "<<obj.destination<<"\n";	
 	return obj;
 }
 
