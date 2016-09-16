@@ -2,7 +2,7 @@
 #define REQUEST_H
 
 class Request{
-	private:
+	public:
 		int source;
 		int destination;
 		double holding_time;

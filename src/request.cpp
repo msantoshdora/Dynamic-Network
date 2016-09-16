@@ -2,7 +2,9 @@
 
 
 //Default Constructor
-Request::Request(){}
+Request::Request(){ 
+	setRequest(0,0,0,0);
+}
 // Request constructor
 Request::Request(int src, int dest, double h_time, double bw){
 
