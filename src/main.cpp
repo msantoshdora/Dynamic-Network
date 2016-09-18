@@ -17,7 +17,7 @@ int main(){
 	clock_t begin = clock();
 	double diff = 0;
 	int req;
-	std::map<int,Request> network;
+	std::multimap<int,Request> network;
 	 std::random_device rd;
         std::default_random_engine generator(rd());
 	//std::default_random_engine generator;
@@ -43,7 +43,8 @@ int main(){
 	
 			while((diff<1) && (req>0) ){
 				r1 = n1.generateRequest(i);		
-				network[i] = r1;
+				//network[i] = r1;
+				network.insert(std::pair<int,Request> (i,r1));
 /*
 				std::cout<<"Destination: "<<network[i].destination<<"\n";
 				std::cout<<"Source: "<<network[i].source<<"\n";
@@ -58,14 +59,16 @@ int main(){
 			diff = double(end - begin)/CLOCKS_PER_SEC;
 		}
 	}
+	
+
 
 	//For rest 15 seconds
-	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 4, 0, 0, 0, 0},
-                       {4, 0, 8, 0, 0, 0},
-                       {0, 8, 0, 7, 0, 4},
-                       {0, 0, 7, 0, 9, 14},
-                       {0, 0, 0, 9, 0, 10},
-                       {0, 0, 4, 0, 10, 0},
+	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0},
+                       {0, 0, 0, 0, 0, 0},
                      
                       };
  
