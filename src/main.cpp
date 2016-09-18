@@ -70,6 +70,7 @@ int main(){
                       };
  
  	//To print the shortest path   
+ 	std::cout<<"src: 1, destination: 4 \n 1 ";
 	n1.findShortestPath(graph,1);
 	n1.printPath(4);	
 	
