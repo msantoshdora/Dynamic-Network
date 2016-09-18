@@ -15,7 +15,8 @@ Network::Network(){}
 //Network request generator
 Request Network::generateRequest(int source){
 	Request obj;
-	std::default_random_engine generator;
+        std::random_device rd;			//For randomly generating default_random_engine
+        std::default_random_engine generator(rd());
 	std::poisson_distribution<int> distribution(10);
 	/* initialize random seed */
 	srand(time(NULL));
@@ -26,7 +27,7 @@ Request Network::generateRequest(int source){
 	bw = distribution(generator);
 	htime = distribution(generator);
 	obj.setRequest(src,dest,bw,htime);
-	std::cout<<"Matching: "<<obj.destination<<"\n";	
+	std::cout<<"Holding Time: "<<htime<<"\n";	
 	return obj;
 }
 
