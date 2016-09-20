@@ -62,20 +62,28 @@ int main(){
 	
 
 
+for(auto &i: network){
+	//int p = 1;
+	//std::cout<<"For "<<++p<<":\n";
+	std::cout<<(i.second).holding_time<<"\n";
+	
+}
+
+
 	//For rest 15 seconds
-	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 0, 0, 0, 0, 0},
-                       {0, 0, 0, 0, 0, 0},
-                       {0, 0, 0, 0, 0, 0},
-                       {0, 0, 0, 0, 0, 0},
-                       {0, 0, 0, 0, 0, 0},
-                       {0, 0, 0, 0, 0, 0},
+	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 8, 0, 0, 0, 0},
+                       {0, 4, 0, 0, 0, 0},
+                       {0, 0, 0, 4, 0, 0},
+                       {0, 8, 0, 0, 0, 0},
+                       {0, 0, 4, 0, 0, 0},
+                       {0, 0, 0, 1, 0, 0},
                      
                       };
  
  	//To print the shortest path   
- 	std::cout<<"src: 1, destination: 4 \n 1 ";
+ //	std::cout<<"src: 1, destination: 4 \n 1 ";
 	n1.findShortestPath(graph,1);
-	n1.printPath(4);	
+//	n1.printPath(4);	
 	
 
 	myfile << diff;
