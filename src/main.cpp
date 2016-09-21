@@ -6,6 +6,8 @@
 #include<random>
 #include<map>
 #include<list>
+#include"spt.h"
+
 
 #define  NETWORK_MEAN 6
 #define  NETWORK_NODES 6
@@ -18,7 +20,9 @@ int main(){
 	double diff = 0;
 	int req;
 	std::multimap<int,Request> network;
-	 std::random_device rd;
+        std::multimap<int,Request>::key_compare mycomp = network.key_comp();
+
+	std::random_device rd;
         std::default_random_engine generator(rd());
 	//std::default_random_engine generator;
 	std::default_random_engine request_generator(rd());
@@ -60,30 +64,24 @@ int main(){
 		}
 	}
 	
-
-
-for(auto &i: network){
-	//int p = 1;
-	//std::cout<<"For "<<++p<<":\n";
-	std::cout<<(i.second).holding_time<<"\n";
+	 std::multimap<int,Request>::iterator it = network.begin(); //To iterator over elements
 	
-}
+         int highest = network.rbegin()->first;     // key value of last element
+	 int lsource,ldestination;
+	 do {   
+   		 creat();
+		 lsource = (*it).first;
+		 ldestination = (*it).second.destination;
+   		 std::cout <<"Source: "<< (*it).first << " Destination: " << (*it).second.destination << '\n';
+		 SPT(lsource,ldestination);
+		// printf("\n shortest path between %d to %d ==%d\n path  ",lsource,ldestination,dist[ldestination]);
+   		 for(int k=top;k>=0;k--){
+ 			std::cout<<stack[k]<<"--> ";
+		  }
+		std::cout<<"\n";
 
-
-	//For rest 15 seconds
-	  int graph[NETWORK_NODES][NETWORK_NODES] = {{0, 8, 0, 0, 0, 0},
-                       {0, 4, 0, 0, 0, 0},
-                       {0, 0, 0, 4, 0, 0},
-                       {0, 8, 0, 0, 0, 0},
-                       {0, 0, 4, 0, 0, 0},
-                       {0, 0, 0, 1, 0, 0},
-                     
-                      };
- 
- 	//To print the shortest path   
- //	std::cout<<"src: 1, destination: 4 \n 1 ";
-	n1.findShortestPath(graph,1);
-//	n1.printPath(4);	
+   		 
+ 	 } while (mycomp((*it++).first, highest) );
 	
 
 	myfile << diff;
