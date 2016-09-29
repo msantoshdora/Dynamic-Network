@@ -12,6 +12,11 @@
 #define  NETWORK_MEAN 6
 #define  NETWORK_NODES 6
 #define  REQUESTS 6
+#define  WL 5         //Number of Wave Lengths
+
+
+int allocateBandwidth();
+int displayPath(std::multimap<int,Request> network);
 
 
 int main(){
@@ -19,8 +24,10 @@ int main(){
 	clock_t begin = clock();
 	double diff = 0;
 	int req;
+	int wavelengths[WL];
+
 	std::multimap<int,Request> network;
-        std::multimap<int,Request>::key_compare mycomp = network.key_comp();
+       // std::multimap<int,Request>::key_compare mycomp = network.key_comp();
 
 	std::random_device rd;
         std::default_random_engine generator(rd());
@@ -47,15 +54,8 @@ int main(){
 	
 			while((diff<1) && (req>0) ){
 				r1 = n1.generateRequest(i);		
-				//network[i] = r1;
 				network.insert(std::pair<int,Request> (i,r1));
-/*
-				std::cout<<"Destination: "<<network[i].destination<<"\n";
-				std::cout<<"Source: "<<network[i].source<<"\n";
-				std::cout<<"Bw: "<<network[i].bandwidth<<"\n";
-				std::cout<<"Ht: "<<network[i].holding_time<<"\n";
-
-*/				clock_t end = clock();
+				clock_t end = clock();
 				diff = double(end - begin) / CLOCKS_PER_SEC;
 				req--;
 			}
@@ -64,6 +64,17 @@ int main(){
 		}
 	}
 	
+	displayPath(network);
+
+	myfile << diff;
+	myfile.close();
+	return 0;
+}
+
+
+int displayPath(std::multimap<int,Request> network){
+
+ 	 std::multimap<int,Request>::key_compare mycomp= network.key_comp();
 	 std::multimap<int,Request>::iterator it = network.begin(); //To iterator over elements
 	
          int highest = network.rbegin()->first;     // key value of last element
@@ -72,20 +83,25 @@ int main(){
    		 creat();
 		 lsource = (*it).first;
 		 ldestination = (*it).second.destination;
-   		 std::cout <<"Source: "<< (*it).first << " Destination: " << (*it).second.destination << '\n';
+   		 std::cout <<"Source: "<< (*it).first << " Destination: " << (*it).second.destination <<"\n";
 		 SPT(lsource,ldestination);
 		// printf("\n shortest path between %d to %d ==%d\n path  ",lsource,ldestination,dist[ldestination]);
    		 for(int k=top;k>=0;k--){
- 			std::cout<<stack[k]<<"--> ";
+			if(k==top){
+				std::cout<<"Path:\n";
+			}
+ 			std::cout<<stack[k];
+			if(k>0){
+				std::cout<<"-->";
+			}
 		  }
 		std::cout<<"\n";
 
    		 
  	 } while (mycomp((*it++).first, highest) );
-	
 
-	myfile << diff;
-	myfile.close();
-	return 0;
+return 0;
+
+
 }
 
