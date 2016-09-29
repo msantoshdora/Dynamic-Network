@@ -15,19 +15,21 @@ Network::Network(){}
 //Network request generator
 Request Network::generateRequest(int source){
 	Request obj;
-        std::random_device rd;			//For randomly generating default_random_engine
+        std::random_device rd, rd1;			//For randomly generating default_random_engine
         std::default_random_engine generator(rd());
+	std::default_random_engine generator1(rd1());
 	std::poisson_distribution<int> distribution(10);
+	std::poisson_distribution<int> distribution1(10);
 	/* initialize random seed */
 	srand(time(NULL));
 
 	src = source;
-	dest = rand() % 6 +1;
-
+	//dest = rand() % 6 +1;
+	dest = distribution1(generator1)%6;
 	bw = distribution(generator);
 	htime = distribution(generator);
 	obj.setRequest(src,dest,bw,htime);
-	std::cout<<"Holding Time: "<<htime<<"\n";	
+//	std::cout<<"Holding Time: "<<htime<<"\n";	
 	return obj;
 }
 
@@ -62,9 +64,9 @@ void Network::printPath(int destin){
     // Base Case : If j is source
     if (parent[destin]==-1)
         return;
- 
+// 	std::cout<<"Destination: "<<destin<<" ";
     printPath( parent[destin]);
- 
+   
     printf("%d ", destin);
 }
 
