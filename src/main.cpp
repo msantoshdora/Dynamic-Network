@@ -27,7 +27,7 @@ int main(){
 	clock_t begin = clock();
 	double diff = 0;
 	int req;
-	//int wavelengths[WL];
+
 
 	std::multimap<int,Request> network;
        // std::multimap<int,Request>::key_compare mycomp = network.key_comp();
@@ -93,15 +93,18 @@ int displayPath(std::multimap<int,Request> network){
    		 creat();
 		 lsource = (*it).first;
 		 ldestination = (*it).second.destination;
-   		 std::cout <<"Source: "<< (*it).first << " Destination: " << (*it).second.destination <<"\n";
+   		 std::cout <<"\nSource: "<< (*it).first << " Destination: " << (*it).second.destination <<"\n";
 		 SPT(lsource,ldestination);
 		// printf("\n shortest path between %d to %d ==%d\n path  ",lsource,ldestination,dist[ldestination]);
-		 std::cout<<"Bandwidth Allocated: "<<(*it).second.bandwidth<<"\n";
+		 std::cout<<"Bandwidth: "<<(*it).second.bandwidth<<"\n";
+		
+
+
 		while(wavelengths[currentWavelength] != 0){
 			 if(wavelengths[currentWavelength] != 0){
 				std::cout<<"Allocated Wavelength: "<<wavelengths[currentWavelength]<<"\n";			
 				wavelengths[currentWavelength] ==0;
-				//(++currentWavelength)%= WL;	
+					
 				currentWavelength++;
 				currentWavelength = currentWavelength%WL;
 				break;
@@ -118,14 +121,17 @@ int displayPath(std::multimap<int,Request> network){
 			if(k==top){
 				std::cout<<"Path: ";
 			}
+			
  			std::cout<<stack[k];
-			paus(clock(),&time_hold);
+			
 			if(time_hold == 0){
 				std::cout<<"Cannot allocate this resource!\n";
 				break;			
 			}
 			if(k>0){
+				
 				std::cout<<"-->";
+				paus(clock(),&time_hold);
 			}
 		  }
 		std::cout<<"\n";
@@ -155,7 +161,7 @@ void paus(clock_t begin,int *holdTime){
 	double diff = 0;
 	diff = 0;                         //Intializing to 0
 	
-   	while(diff <=0.1){
+   	while(diff <=0.5){
         	clock_t end = clock();
 		diff = double(end - begin) / CLOCKS_PER_SEC;
 		holdTime--;
