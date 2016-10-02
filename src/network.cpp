@@ -25,7 +25,7 @@ Request Network::generateRequest(int source){
 
 	src = source;
 	//dest = rand() % 6 +1;
-	dest = distribution1(generator1)%6;
+	dest = distribution1(generator1)%6 + 1;
 	bw = distribution(generator);
 	htime = distribution(generator);
 	obj.setRequest(src,dest,bw,htime);
