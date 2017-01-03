@@ -10,6 +10,7 @@ class Network{
 		int dest;
 		double bw;
 		double htime;
+		float sn;
 		int dist[V];  // The output array. dist[i] will hold
                 // the shortest distance from src to i
  
@@ -23,7 +24,8 @@ class Network{
 		Network();
 		Request generateRequest(int source);
 		void findShortestPath(int graph[V][V], int source);
-		void allocateBandwidth();
+		double allocateBandwidth();
+		float allocateSinr();
 		void beginServing();
 		void releaseResources();
 		int minDistance(int dist[], bool sptSet[]);

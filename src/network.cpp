@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<time.h>
 #include<climits>
+#include<sys/time.h> //For gettimeofday()
 
 
 #define V 6
@@ -26,16 +27,56 @@ Request Network::generateRequest(int source){
 	src = source;
 	//dest = rand() % 6 +1;
 	dest = distribution1(generator1)%6 + 1;
-	bw = distribution(generator);
+        
+	bw = allocateBandwidth();
+	//std::cout<<bw<<"This is the bandwidth allocated\n";
 	htime = distribution(generator);
-	obj.setRequest(src,dest,bw,htime);
+	sn = allocateSinr();
+	obj.setRequest(src,dest,htime,bw,sn);
 //	std::cout<<"Holding Time: "<<htime<<"\n";	
 	return obj;
 }
 
-//Resource allocator
-void Network::allocateBandwidth(){
-	
+double Network::allocateBandwidth(){
+
+	/* initialize random seed */
+	timeval t1;
+	gettimeofday(&t1, NULL);
+	srand(t1.tv_usec * t1.tv_sec);             //Seeding is better in this case
+
+	int randNum = (rand() % 25) + 1;
+	//std::cout<<randNum<<"Checking\n";
+	if(randNum>=1 && randNum<=5)
+		return 64;
+	if(randNum>= 6 && randNum<=10)
+		return 128;
+	if(randNum>=11 && randNum<=15)
+		return 256;
+	if(randNum>=16 && randNum<=20)
+		return 512;
+	if(randNum>=21 && randNum<=25)
+		return 1024;
+}
+
+float Network::allocateSinr(){
+	/* initialize random seed */
+	timeval t1;
+	gettimeofday(&t1, NULL);
+	srand(t1.tv_usec * t1.tv_sec);             //Seeding is better in this case
+
+	int randNum = (rand() % 25) + 1;
+	//std::cout<<randNum<<"Checking\n";
+	if(randNum>=1 && randNum<=5)
+		return 6.4;
+	if(randNum>= 6 && randNum<=10)
+		return 12.8;
+	if(randNum>=11 && randNum<=15)
+		return 25.6;
+	if(randNum>=16 && randNum<=20)
+		return 5.12;
+	if(randNum>=21 && randNum<=25)
+		return 1.024;
+
 }
 
 //Initialize the serving
