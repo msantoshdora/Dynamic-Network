@@ -13,6 +13,7 @@
 
 #define  NETWORK_MEAN 6
 #define  NETWORK_NODES 6
+#define UNIT_TIME 2
 #define  REQUESTS 6
 #define  WL 5                   //Number of Wave Lengths
 #define ALLOWED_SERVE_TIME 20
@@ -22,12 +23,21 @@ int currentWavelength;	       //Current Available Wavelength to allocate
 std::priority_queue<Request> reqs;	//Data Structure to store Requests generated in unit time to serve
 std::priority_queue<Request> reqsS1,reqsS2,reqsS3,reqsS4,reqsS5,reqsS6,t;  //Individual request storage for stations
 int total_requests;
+int stationRequest[6][10];               //To store station-request generated data for 10 unit time
+int stationRequestSatisfy[6][10];        //To store request satisfy per station for 10 unit time
+int sinrRequestSatisfy[6][10];		//To store request satisfy per sinr for 10 unit time
+int currentStation;
+int count;
 
 void paus(double holdTime);
 void assignWavelengths();
 void displayResult(int total_requests,int count_number_of_requests_served);
 double displayPath(std::multimap<int,Request> network,std::priority_queue<Request>&temp,double elapsed_time,clock_t start);
 bool checkDeadline(std::priority_queue<Request> temp,double delayedTime);
+void initializeTable();
+void displayStationRequest();
+void displayStationRequestSatisfy();
+void displaySinrRequestSatisfy();
 
 /**
  * To Add a Priority to signal to noise ratio to server the request in that order.
@@ -37,11 +47,15 @@ bool operator<(const Request& a, const Request& b) {
 }
 
 int main(){
+
 	double temp_elapsed_time = 0;
 	std::fstream outputFile; 
         outputFile.open("requestFile.txt", std::ios::out | std::ios::trunc); 
+        count = 0;
+	initializeTable();
         //To contiue for indefinite period
-	while(1){
+	while(count< UNIT_TIME){
+		++count;                       //Number of Unit Time
 	        total_requests = 0;
 		clock_t begin = clock();
 		double diff = 0;
@@ -71,7 +85,7 @@ int main(){
 	
 		       req = no_of_request(request_generator);
 		       std::cout<<"For Station "<<i<<" , Number of New Requests Generated: "<<req<<"\n";
-		       
+		       stationRequest[i-1][count-1] = req;          //Fill the stationRequest matrix for station vs time unit data
 	      	       total_requests+=req;
 		       Request r1;
 		       diff = 0;                         //Intializing to 0
@@ -118,15 +132,17 @@ int main(){
 		while(temp_elapsed_time < ALLOWED_SERVE_TIME){ 
 		        
 			
-			if(serial == 1) t = reqsS1;
-			if(serial == 2) t = reqsS2;
-			if(serial == 3) t = reqsS3;
-			if(serial == 4) t = reqsS4;
-			if(serial == 5) t = reqsS5;
-			if(serial == 6) t = reqsS6;
+			if(serial == 1){ 
+			t = reqsS1;}
+			if(serial == 2){ t = reqsS2;}
+			if(serial == 3){ t = reqsS3;}
+			if(serial == 4){ t = reqsS4;}
+			if(serial == 5){ t = reqsS5;}
+			if(serial == 6){ t = reqsS6;}
                         if(serial == 1){
 				std::cout<<"Size: "<<t.size()<<"\n";
 			}
+			currentStation = serial;                       //For stationRequestStatisfy table
 			temp_elapsed_time = displayPath(network,t,temp_elapsed_time,start);
 			if(serial == 1) reqsS1 = t;
 			if(serial == 2) reqsS2 = t;
@@ -143,13 +159,17 @@ int main(){
 			std::cout<<serial<<",";
 			++serial;
 		}
-		std::cout<<" aren't served within 1 unit time\n";
+		std::cout<<" aren't handled within 1 unit time\n";
 
 		myfile << diff;            //To be removed at the end
 		myfile.close();            //To be removed at the end
 	}
 
 	outputFile.close();
+
+	displayStationRequest();
+	displayStationRequestSatisfy();
+	displaySinrRequestSatisfy();
 		return 0;
 }
 
@@ -169,6 +189,7 @@ double displayPath(std::multimap<int,Request> network,std::priority_queue<Reques
 	 int wl_used;
 	 int time_hold;
 	 int trequests;
+	 int satisfiedRequest = 0;
 
 	// std::priority_queue<Request> temp = reqs;
 	//std::cout<<"Inside displayPath Function size: "<<temp.size()<<"\n";
@@ -278,12 +299,19 @@ double displayPath(std::multimap<int,Request> network,std::priority_queue<Reques
 		  }
 		std::cout<<"\n";
 	        temp.pop();               //Deleting the Request which is served
-	//To check if under given serving time or not.
+		
+		satisfiedRequest++;
+
+ 	 	//To check if under given serving time or not.
+
 		clock_t now = clock();
         	clock_t delta = now - start;
          	seconds_elapsed = static_cast<double>(delta) / CLOCKS_PER_SEC + se;
    		 
  	 } while (seconds_elapsed < ALLOWED_SERVE_TIME && !temp.empty());    //&& mycomp((*it++).first, highest)
+
+	stationRequestSatisfy[currentStation-1][count-1] = satisfiedRequest;
+
 
 	t = temp;               //To manage the Queue size in different Functions
 	//std::cout<<"Size after removing: "<<temp.size()<<" Seconds Elapsed: "<<seconds_elapsed<<"\n";
@@ -292,6 +320,24 @@ double displayPath(std::multimap<int,Request> network,std::priority_queue<Reques
 return seconds_elapsed;
 
 
+}
+
+
+
+void initializeTable(){
+	//int stationRequest[6][10];               //To store station-request generated data for 10 unit time
+//int stationRequestSatisfy[6][10];        //To store request satisfy per station for 10 unit time
+//int sinrRequestSatisfy[6][10];		//To store request satisfy per sinr for 10 unit time
+
+
+	for(int i=0;i< NETWORK_NODES;i++){
+		for(int j=0;j< UNIT_TIME;j++){
+			stationRequest[i][j] = 0;
+			stationRequestSatisfy[i][j] = 0;
+			sinrRequestSatisfy[i][j] = 0;
+		}	
+	}
+	
 }
 
 /**
@@ -309,8 +355,51 @@ bool checkDeadline(std::priority_queue<Request> temp,double delayedTime){
 void displayResult(int total_requests,int count_number_of_requests_served){
 
 	std::cout<<"Total Requests: "<<total_requests<<"\n";
-	std::cout<<"Requests served within 1 unit time: "<<count_number_of_requests_served<<"\n\n";
+	std::cout<<"Requests Handled within 1 unit time: "<<count_number_of_requests_served<<"\n\n";
 }
+
+
+
+void displayStationRequest(){
+	std::cout<<"-------------------Station-Request Table--------------"<<"\n";
+	for(int i=0;i< NETWORK_NODES;i++){
+		for(int j=0;j< UNIT_TIME;j++){
+			std::cout<<stationRequest[i][j]<<" ";
+			//stationRequestSatisfy[i][j] = 0;
+			//sinrRequestSatisfy[i][j] = 0;
+		}
+		std::cout<<"\n";	
+	}
+}
+void displayStationRequestSatisfy(){
+	std::cout<<"-------------------Station-Request-Satisfy Table--------------"<<"\n";
+	for(int i=0;i< NETWORK_NODES;i++){
+		for(int j=0;j< UNIT_TIME;j++){
+			std::cout<<stationRequestSatisfy[i][j]<<" ";
+			//stationRequestSatisfy[i][j] = 0;
+			//sinrRequestSatisfy[i][j] = 0;
+		}
+		std::cout<<"\n";	
+	}
+
+}
+void displaySinrRequestSatisfy(){
+	std::cout<<"-------------------Sinr-Request Table--------------"<<"\n";
+	for(int i=0;i< NETWORK_NODES;i++){
+		for(int j=0;j< UNIT_TIME;j++){
+			std::cout<<sinrRequestSatisfy[i][j]<<" ";
+			//stationRequestSatisfy[i][j] = 0;
+			//sinrRequestSatisfy[i][j] = 0;
+		}
+		std::cout<<"\n";	
+	}
+	
+}
+
+
+
+
+
 
 /**
  *  Assign available wavelengths
@@ -327,7 +416,7 @@ void assignWavelengths(){
 *  To give a pause till the holding time of the serving request gets finished.
 */
 void paus(double holdTime){
-	std::cout<<"\n              Serving... \n";
+	std::cout<<"\n              Processing... \n";
 
 
 	const clock_t start = clock();
