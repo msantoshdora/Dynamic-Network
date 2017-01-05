@@ -11,6 +11,8 @@ class Network{
 		double bw;
 		double htime;
 		float sn;
+		double dl;
+		clock_t br;
 		int dist[V];  // The output array. dist[i] will hold
                 // the shortest distance from src to i
  
@@ -25,6 +27,7 @@ class Network{
 		Request generateRequest(int source);
 		void findShortestPath(int graph[V][V], int source);
 		double allocateBandwidth();
+		double assignDeadline();
 		float allocateSinr();
 		void beginServing();
 		void releaseResources();
