@@ -1,6 +1,9 @@
 #ifndef REQUEST_H
 #define REQUEST_H
 
+#include<ctime>
+#include<bits/stdc++.h>
+
 class Request{
 	public:
 		int source;
@@ -8,10 +11,12 @@ class Request{
 		double holding_time;
 		double bandwidth;
 		float sinr;
+		double deadline;
+		clock_t birth;
 	public:
 		Request();
-		Request(int src, int dest, double h_time, double bw,float sn);
-		void setRequest(int src, int dest, double h_time, double bw,float sn);
+		Request(int src, int dest, double h_time, double bw,float sn,double dl,clock_t br);
+		void setRequest(int src, int dest, double h_time, double bw,float sn, double dl,clock_t br);
 		
 };
 
